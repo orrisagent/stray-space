@@ -1,0 +1,291 @@
+/* ========================================
+   STRAY — Deep Space Logbook
+   T. K. Navarro
+   Deep Space Communications Division
+
+   Must hold its atmosphere even as pure text
+   with JavaScript disabled.
+   ======================================== */
+
+:root {
+  --void: #080b12;
+  --deep: #0a0e17;
+
+  --text: #adb4c0;
+  --text-dim: #586070;
+  --text-ghost: #2a3244;
+  --text-bright: #d0d5de;
+
+  --signal: #5a8fa8;
+  --signal-faint: rgba(90, 143, 168, 0.05);
+
+  --temporal: #6a6458;
+
+  --serif: 'Cormorant Garamond', 'Georgia', serif;
+  --sans: 'Space Grotesk', 'Helvetica Neue', sans-serif;
+  --mono: 'Space Mono', 'Courier New', monospace;
+}
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 18px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  color: var(--text);
+  font-family: var(--serif);
+  font-weight: 300;
+  line-height: 2;
+  letter-spacing: 0.015em;
+  overflow-x: hidden;
+  cursor: default;
+  background: var(--void);
+}
+
+::selection {
+  background: rgba(90, 143, 168, 0.1);
+  color: var(--text-bright);
+}
+
+/* ---- Background layer: fixed, does not scroll. The universe. ---- */
+
+.cosmos {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 20% 80%, rgba(14, 20, 36, 1) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(16, 22, 38, 0.8) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(10, 14, 23, 1) 0%, var(--void) 100%);
+  background-color: var(--void);
+}
+
+/* Canvas: micro-dust, signal beacon */
+.cosmos-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Noise: fixed grain, like sensor static */
+.cosmos::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+/* ---- Signal reception overlay ---- */
+
+.reception {
+  position: fixed;
+  inset: 0;
+  background: var(--void);
+  z-index: 10000;
+  pointer-events: none;
+  /* Starts opaque; JS removes it. Without JS, it's hidden via noscript. */
+}
+
+.js .reception {
+  opacity: 1;
+  transition: opacity 3.5s ease;
+}
+
+.js .reception.received {
+  opacity: 0;
+}
+
+/* ---- Content layer ---- */
+
+.content {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---- Hidden navigation ---- */
+
+.nav-trigger {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 48px;
+  z-index: 9999;
+}
+
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  padding: 1.4rem 2rem;
+  display: flex;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 1.5s ease;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(8, 11, 18, 0.92) 0%, transparent 100%);
+}
+
+.nav.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.nav-inner {
+  display: flex;
+  gap: 3rem;
+}
+
+.nav-inner a {
+  font-family: var(--mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.2em;
+  color: var(--text-ghost);
+  text-decoration: none;
+  transition: color 1.5s ease;
+}
+
+.nav-inner a:hover {
+  color: var(--signal);
+}
+
+/* ---- Opening: centers first entry vertically ---- */
+
+.opening {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 12vh;
+  padding-bottom: 4vh;
+}
+
+/* ---- Log entry ---- */
+
+.entry {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.flow > .entry {
+  margin-bottom: 18vh;
+}
+
+.flow > .entry:last-child {
+  margin-bottom: 0;
+}
+
+.entry-stamp {
+  font-family: var(--mono);
+  font-size: 0.48rem;
+  letter-spacing: 0.2em;
+  color: var(--temporal);
+  opacity: 0.45;
+  margin-bottom: 2.8rem;
+}
+
+.entry-body p {
+  margin-bottom: 1.8rem;
+  font-size: 1.08rem;
+  font-weight: 300;
+  color: var(--text);
+}
+
+.entry-body p:last-child {
+  margin-bottom: 0;
+}
+
+.oath {
+  margin-top: 1.2rem;
+  padding-left: 1.2rem;
+  border-left: 1px solid var(--signal-faint);
+  font-style: italic;
+  color: var(--text-dim);
+  line-height: 2.4;
+}
+
+/* ---- Fade animation (only with JS) ---- */
+
+.js .fade-unit {
+  opacity: 0;
+  transition: opacity 2.8s ease;
+}
+
+.js .fade-unit.visible {
+  opacity: 1;
+}
+
+/* Without JS: everything visible by default */
+
+/* ---- End: long silence ---- */
+
+.end {
+  text-align: center;
+  padding: 0 2rem;
+}
+
+.end-space {
+  height: 40vh;
+}
+
+.end-link {
+  font-family: var(--mono);
+  font-size: 0.48rem;
+  letter-spacing: 0.25em;
+  color: var(--text-ghost);
+  text-decoration: none;
+  transition: color 2s ease;
+  display: inline-block;
+}
+
+.end-link:hover {
+  color: var(--signal);
+}
+
+.end-sig {
+  margin-top: 5rem;
+  margin-bottom: 3rem;
+  font-family: var(--mono);
+  font-size: 0.42rem;
+  letter-spacing: 0.18em;
+  color: var(--text-ghost);
+  opacity: 0.25;
+  line-height: 2.4;
+}
+
+/* ---- Links ---- */
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ---- Responsive ---- */
+
+@media (max-width: 640px) {
+  html { font-size: 16px; }
+
+  .entry { padding: 0 1.5rem; }
+
+  .flow > .entry { margin-bottom: 14vh; }
+
+  .opening { padding-top: 8vh; }
+
+  .nav-inner { gap: 2rem; }
+
+  .end-space { height: 28vh; }
+}
