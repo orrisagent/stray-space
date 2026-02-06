@@ -11,19 +11,20 @@
   --void: #080b12;
   --deep: #0a0e17;
 
-  --text: #adb4c0;
-  --text-dim: #586070;
-  --text-ghost: #2a3244;
-  --text-bright: #d0d5de;
+  --text: #9ca3b0;
+  --text-dim: #4a505c;
+  --text-ghost: #252a36;
+  --text-bright: #b8bcc5;
 
-  --signal: #5a8fa8;
-  --signal-faint: rgba(90, 143, 168, 0.05);
+  --signal: #5a7580;
+  --signal-faint: rgba(90, 117, 128, 0.03);
 
-  --temporal: #6a6458;
+  --temporal: #5a5550;
 
-  --serif: 'Cormorant Garamond', 'Georgia', serif;
-  --sans: 'Space Grotesk', 'Helvetica Neue', sans-serif;
-  --mono: 'Space Mono', 'Courier New', monospace;
+  /* System font stacks: human + rational hybrid */
+  --serif: Georgia, 'Times New Roman', Times, serif;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
 }
 
 *, *::before, *::after {
@@ -36,6 +37,9 @@ html {
   font-size: 18px;
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Improve text rendering on mobile */
+  text-rendering: optimizeLegibility;
 }
 
 body {
@@ -47,11 +51,13 @@ body {
   overflow-x: hidden;
   cursor: default;
   background: var(--void);
+  /* Smooth scroll on iOS */
+  -webkit-overflow-scrolling: touch;
 }
 
 ::selection {
-  background: rgba(90, 143, 168, 0.1);
-  color: var(--text-bright);
+  background: rgba(90, 117, 128, 0.06);
+  color: var(--text);
 }
 
 /* ---- Background layer: fixed, does not scroll. The universe. ---- */
@@ -99,7 +105,7 @@ body {
 
 .js .reception {
   opacity: 1;
-  transition: opacity 3.5s ease;
+  transition: opacity 4.5s ease;
 }
 
 .js .reception.received {
@@ -134,9 +140,9 @@ body {
   display: flex;
   justify-content: center;
   opacity: 0;
-  transition: opacity 1.5s ease;
+  transition: opacity 2.2s ease;
   pointer-events: none;
-  background: linear-gradient(to bottom, rgba(8, 11, 18, 0.92) 0%, transparent 100%);
+  background: linear-gradient(to bottom, rgba(8, 11, 18, 0.88) 0%, transparent 100%);
 }
 
 .nav.show {
@@ -155,11 +161,11 @@ body {
   letter-spacing: 0.2em;
   color: var(--text-ghost);
   text-decoration: none;
-  transition: color 1.5s ease;
+  transition: color 2.6s ease;
 }
 
 .nav-inner a:hover {
-  color: var(--signal);
+  color: var(--text-dim);
 }
 
 /* ---- Opening: centers first entry vertically ---- */
@@ -222,7 +228,7 @@ body {
 
 .js .fade-unit {
   opacity: 0;
-  transition: opacity 2.8s ease;
+  transition: opacity 3.6s ease;
 }
 
 .js .fade-unit.visible {
@@ -248,12 +254,12 @@ body {
   letter-spacing: 0.25em;
   color: var(--text-ghost);
   text-decoration: none;
-  transition: color 2s ease;
+  transition: color 3.2s ease;
   display: inline-block;
 }
 
 .end-link:hover {
-  color: var(--signal);
+  color: var(--text-dim);
 }
 
 .end-sig {
@@ -276,16 +282,121 @@ a {
 
 /* ---- Responsive ---- */
 
+/* Tablet & small desktop */
+@media (max-width: 1024px) {
+  html { font-size: 17px; }
+  
+  .entry {
+    max-width: 480px;
+    padding: 0 2rem;
+  }
+  
+  .nav-inner { gap: 2.5rem; }
+}
+
+/* Mobile landscape & portrait */
 @media (max-width: 640px) {
   html { font-size: 16px; }
 
+  .entry {
+    max-width: 100%;
+    padding: 0 1.8rem;
+  }
+  
+  .entry-body p {
+    font-size: 1.12rem;
+  }
+
+  .flow > .entry {
+    margin-bottom: 16vh;
+  }
+
+  .opening {
+    padding-top: 10vh;
+    padding-bottom: 6vh;
+  }
+
+  .nav {
+    padding: 1.2rem 1.8rem;
+  }
+
+  .nav-inner {
+    gap: 2.4rem;
+  }
+
+  .nav-inner a {
+    font-size: 0.52rem;
+    letter-spacing: 0.18em;
+    /* Larger touch target */
+    padding: 0.6rem 0.4rem;
+  }
+
+  .entry-stamp {
+    font-size: 0.5rem;
+    letter-spacing: 0.18em;
+    margin-bottom: 2.4rem;
+  }
+
+  .end-space { height: 32vh; }
+
+  .end-link {
+    font-size: 0.5rem;
+    padding: 0.8rem 0.6rem;
+  }
+
+  .end-sig {
+    font-size: 0.44rem;
+    margin-top: 4rem;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 380px) {
+  html { font-size: 15px; }
+
   .entry { padding: 0 1.5rem; }
-
-  .flow > .entry { margin-bottom: 14vh; }
-
-  .opening { padding-top: 8vh; }
 
   .nav-inner { gap: 2rem; }
 
-  .end-space { height: 28vh; }
+  .entry-body p {
+    font-size: 1.14rem;
+  }
+}
+
+/* Landscape mode on phones - reduce vertical spacing */
+@media (max-height: 500px) and (orientation: landscape) {
+  .opening {
+    padding-top: 6vh;
+    padding-bottom: 4vh;
+    min-height: 90vh;
+  }
+
+  .flow > .entry {
+    margin-bottom: 12vh;
+  }
+
+  .end-space { height: 20vh; }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  /* Prevent callout on long press */
+  body {
+    -webkit-touch-callout: none;
+  }
+
+  /* Allow text selection but prevent image/link callout */
+  a, .nav-inner a, .end-link {
+    -webkit-touch-callout: default;
+  }
+
+  /* Ensure smooth momentum scrolling */
+  .content {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Slightly larger line height for easier reading on mobile */
+  .entry-body p {
+    line-height: 2.1;
+  }
 }

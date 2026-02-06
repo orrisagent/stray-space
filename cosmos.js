@@ -11,12 +11,15 @@
   if (!canvas) return;
 
   var ctx = canvas.getContext('2d');
-  var dpr = Math.min(window.devicePixelRatio || 1, 2);
+  // Cap DPR at 1.5 on mobile for performance
+  var maxDpr = window.innerWidth < 768 ? 1.5 : 2;
+  var dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
   var w, h;
 
   // --- Particles: micro-dust drifting at glacial speed ---
   var particles = [];
-  var PARTICLE_COUNT = 22;
+  var isSmallScreen = window.innerWidth < 768;
+  var PARTICLE_COUNT = isSmallScreen ? 12 : 22;
 
   function initParticles() {
     particles = [];
@@ -102,32 +105,32 @@
 
       ctx.beginPath();
       ctx.arc(p.x, drawY, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(180, 195, 215, ' + (p.a * breathe).toFixed(3) + ')';
+      ctx.fillStyle = 'rgba(165, 175, 190, ' + (p.a * breathe).toFixed(3) + ')';
       ctx.fill();
     }
 
     // Draw signal beacon
-    beacon.phase += 0.0008 * dt; // ~7 second full cycle
+    beacon.phase += 0.0006 * dt; // slower breathing, ~9 second full cycle
     var beaconAlpha = Math.sin(beacon.phase) * 0.5 + 0.5; // 0 - 1
-    beaconAlpha = beaconAlpha * beaconAlpha * 0.35; // ease + max 0.35
+    beaconAlpha = beaconAlpha * beaconAlpha * 0.25; // ease + max 0.25 (weaker)
     var beaconY = beacon.y - offsetY;
 
     // Outer glow
     ctx.beginPath();
-    ctx.arc(beacon.x, beaconY, 6, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(90, 143, 168, ' + (beaconAlpha * 0.08).toFixed(4) + ')';
+    ctx.arc(beacon.x, beaconY, 5, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(90, 117, 128, ' + (beaconAlpha * 0.05).toFixed(4) + ')';
     ctx.fill();
 
     // Inner glow
     ctx.beginPath();
-    ctx.arc(beacon.x, beaconY, 2.5, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(90, 143, 168, ' + (beaconAlpha * 0.25).toFixed(4) + ')';
+    ctx.arc(beacon.x, beaconY, 2, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(90, 117, 128, ' + (beaconAlpha * 0.18).toFixed(4) + ')';
     ctx.fill();
 
     // Core
     ctx.beginPath();
-    ctx.arc(beacon.x, beaconY, 1, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(140, 190, 210, ' + (beaconAlpha * 0.5).toFixed(4) + ')';
+    ctx.arc(beacon.x, beaconY, 0.8, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(120, 140, 150, ' + (beaconAlpha * 0.4).toFixed(4) + ')';
     ctx.fill();
 
     requestAnimationFrame(frame);
