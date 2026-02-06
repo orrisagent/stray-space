@@ -1,143 +1,109 @@
-/**
- * Stray — Background Audio Controller
- * 
- * Minimal ambient audio player.
- * - Does NOT autoplay (respects browser policy)
- * - User can toggle on/off
- * - State persisted in localStorage
- * - Fades in/out smoothly
- */
+/* ========================================
+   STRAY — Ambient Audio Controller
+   
+   Background radiation. Always there.
+   Default: muted. The universe is quiet
+   until you choose to listen.
+   ======================================== */
 
-(function() {
+(function () {
   'use strict';
 
-  var AUDIO_SRC = '/audio/ambient.mp3';
-  var FADE_DURATION = 3000; // 3 seconds
-  var MAX_VOLUME = 0.3; // Keep it subtle
+  var audio = document.getElementById('ambient-audio');
+  var toggle = document.getElementById('audio-toggle');
+  
+  if (!audio || !toggle) return;
 
-  var audio = null;
+  var STORAGE_KEY = 'stray-audio-state';
   var isPlaying = false;
-  var fadeInterval = null;
 
-  // Create audio toggle button
-  function createToggle() {
-    var btn = document.createElement('button');
-    btn.className = 'audio-toggle';
-    btn.setAttribute('aria-label', 'Toggle ambient sound');
-    btn.innerHTML = '<span class="audio-icon"></span>';
-    document.body.appendChild(btn);
-
-    btn.addEventListener('click', function() {
-      if (isPlaying) {
-        fadeOut();
-      } else {
-        fadeIn();
-      }
-    });
-
-    return btn;
-  }
-
-  // Initialize audio element
-  function initAudio() {
-    audio = new Audio(AUDIO_SRC);
-    audio.loop = true;
-    audio.volume = 0;
-    audio.preload = 'none';
-
-    // Handle errors gracefully
-    audio.addEventListener('error', function() {
-      console.log('[Stray] Audio not available');
-      var btn = document.querySelector('.audio-toggle');
-      if (btn) btn.style.display = 'none';
-    });
-  }
-
-  // Fade in
-  function fadeIn() {
-    if (!audio) initAudio();
-
-    audio.play().then(function() {
-      isPlaying = true;
-      updateToggleState(true);
-      localStorage.setItem('stray-audio', 'on');
-
-      clearInterval(fadeInterval);
-      var currentVolume = audio.volume;
-      var step = (MAX_VOLUME - currentVolume) / (FADE_DURATION / 50);
-
-      fadeInterval = setInterval(function() {
-        currentVolume += step;
-        if (currentVolume >= MAX_VOLUME) {
-          audio.volume = MAX_VOLUME;
-          clearInterval(fadeInterval);
-        } else {
-          audio.volume = currentVolume;
-        }
-      }, 50);
-    }).catch(function(e) {
-      console.log('[Stray] Audio play failed:', e.message);
-    });
-  }
-
-  // Fade out
-  function fadeOut() {
-    if (!audio) return;
-
-    isPlaying = false;
-    updateToggleState(false);
-    localStorage.setItem('stray-audio', 'off');
-
-    clearInterval(fadeInterval);
-    var currentVolume = audio.volume;
-    var step = currentVolume / (FADE_DURATION / 50);
-
-    fadeInterval = setInterval(function() {
-      currentVolume -= step;
-      if (currentVolume <= 0) {
-        audio.volume = 0;
-        audio.pause();
-        clearInterval(fadeInterval);
-      } else {
-        audio.volume = currentVolume;
-      }
-    }, 50);
-  }
-
-  // Update button visual state
-  function updateToggleState(playing) {
-    var btn = document.querySelector('.audio-toggle');
-    if (btn) {
-      btn.classList.toggle('playing', playing);
-      btn.setAttribute('aria-pressed', playing);
+  // Restore state from localStorage
+  var savedState = localStorage.getItem(STORAGE_KEY);
+  
+  function updateToggle() {
+    if (isPlaying) {
+      toggle.classList.add('playing');
+      toggle.setAttribute('aria-label', 'Mute ambient audio');
+      toggle.setAttribute('title', 'Mute');
+    } else {
+      toggle.classList.remove('playing');
+      toggle.setAttribute('aria-label', 'Play ambient audio');
+      toggle.setAttribute('title', 'Listen');
     }
   }
 
-  // Initialize
-  function init() {
-    // Only show if audio file exists (check via fetch)
-    fetch(AUDIO_SRC, { method: 'HEAD' })
-      .then(function(res) {
-        if (res.ok) {
-          createToggle();
-          
-          // Check saved preference (but don't autoplay)
-          var saved = localStorage.getItem('stray-audio');
-          if (saved === 'on') {
-            // Show visual hint that audio was previously on
-            updateToggleState(false);
-          }
-        }
-      })
-      .catch(function() {
-        // Audio not available, no button shown
+  function play() {
+    var playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise.then(function() {
+        isPlaying = true;
+        updateToggle();
+        localStorage.setItem(STORAGE_KEY, 'playing');
+      }).catch(function(err) {
+        // Autoplay blocked - need user interaction
+        console.log('Audio play blocked:', err);
+        isPlaying = false;
+        updateToggle();
       });
+    }
   }
 
-  // Start when DOM ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
+  function pause() {
+    audio.pause();
+    isPlaying = false;
+    updateToggle();
+    localStorage.setItem(STORAGE_KEY, 'muted');
   }
+
+  function toggleAudio() {
+    if (isPlaying) {
+      pause();
+    } else {
+      play();
+    }
+  }
+
+  // Click handler
+  toggle.addEventListener('click', toggleAudio);
+
+  // Keyboard support
+  toggle.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      toggleAudio();
+    }
+  });
+
+  // If user previously enabled audio, try to resume
+  // (may be blocked by browser until interaction)
+  if (savedState === 'playing') {
+    // Attempt to play - will likely fail until user interacts
+    // We'll set up a one-time interaction listener
+    var attemptAutoplay = function() {
+      play();
+      document.removeEventListener('click', attemptAutoplay);
+      document.removeEventListener('keydown', attemptAutoplay);
+      document.removeEventListener('touchstart', attemptAutoplay);
+    };
+
+    // Try immediately (might work if page is backgrounded/foregrounded)
+    play();
+
+    // Also listen for first interaction as fallback
+    if (!isPlaying) {
+      document.addEventListener('click', attemptAutoplay, { once: true });
+      document.addEventListener('keydown', attemptAutoplay, { once: true });
+      document.addEventListener('touchstart', attemptAutoplay, { once: true });
+    }
+  }
+
+  // Initialize toggle state
+  updateToggle();
+
+  // Respect reduced motion - disable audio by default
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    pause();
+    localStorage.removeItem(STORAGE_KEY);
+  }
+
 })();
