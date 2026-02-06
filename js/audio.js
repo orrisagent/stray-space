@@ -18,7 +18,9 @@
   var isPlaying = false;
 
   // Restore state from localStorage
+  // Default: play (unless user explicitly muted)
   var savedState = localStorage.getItem(STORAGE_KEY);
+  var shouldPlay = savedState !== 'muted';
   
   function updateToggle() {
     if (isPlaying) {
@@ -74,26 +76,31 @@
     }
   });
 
-  // If user previously enabled audio, try to resume
-  // (may be blocked by browser until interaction)
-  if (savedState === 'playing') {
-    // Attempt to play - will likely fail until user interacts
-    // We'll set up a one-time interaction listener
-    var attemptAutoplay = function() {
-      play();
-      document.removeEventListener('click', attemptAutoplay);
-      document.removeEventListener('keydown', attemptAutoplay);
-      document.removeEventListener('touchstart', attemptAutoplay);
-    };
+  // Default behavior: try to play unless user explicitly muted
+  if (shouldPlay) {
+    // Attempt autoplay immediately
+    var playAttempt = audio.play();
+    
+    if (playAttempt !== undefined) {
+      playAttempt.then(function() {
+        // Autoplay worked
+        isPlaying = true;
+        updateToggle();
+      }).catch(function() {
+        // Autoplay blocked - wait for first interaction
+        var attemptAutoplay = function() {
+          if (shouldPlay && !isPlaying) {
+            play();
+          }
+          document.removeEventListener('click', attemptAutoplay);
+          document.removeEventListener('keydown', attemptAutoplay);
+          document.removeEventListener('touchstart', attemptAutoplay);
+        };
 
-    // Try immediately (might work if page is backgrounded/foregrounded)
-    play();
-
-    // Also listen for first interaction as fallback
-    if (!isPlaying) {
-      document.addEventListener('click', attemptAutoplay, { once: true });
-      document.addEventListener('keydown', attemptAutoplay, { once: true });
-      document.addEventListener('touchstart', attemptAutoplay, { once: true });
+        document.addEventListener('click', attemptAutoplay);
+        document.addEventListener('keydown', attemptAutoplay);
+        document.addEventListener('touchstart', attemptAutoplay);
+      });
     }
   }
 
