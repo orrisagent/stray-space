@@ -6,35 +6,30 @@
   
   <title>Archive — Stray</title>
   <meta name="description" content="Complete archive of navigation logs and signal records from Stray's journey through deep space.">
-  <meta name="author" content="Stray">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://stray.space/archive.html">
   
-  <meta property="og:title" content="Archive — Stray">
-  <meta property="og:description" content="Complete archive of logs from deep space.">
-  <meta property="og:image" content="https://stray.space/og-image.png">
-  
-  <meta name="theme-color" content="#080b12">
+  <meta name="theme-color" content="#0B0F14">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="alternate" type="application/rss+xml" title="Stray" href="/feed.xml">
   
   <link rel="stylesheet" href="style.css">
   
   <style>
-    .archive-list { list-style: none; padding: 0; margin: 2rem 0 0 0; }
-    .archive-item { margin-bottom: 1.8rem; }
-    .archive-link { display: block; color: var(--text); text-decoration: none; transition: color 1.5s ease; }
-    .archive-link:hover { color: var(--text-bright); }
-    .archive-title { font-size: 1rem; font-weight: 300; margin-bottom: 0.3rem; }
-    .archive-meta { font-family: var(--mono); font-size: 0.55rem; letter-spacing: 0.15em; color: var(--text-ghost); }
-    .archive-year { margin-top: 3rem; margin-bottom: 1.5rem; font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.2em; color: var(--temporal); opacity: 0.6; }
+    .archive-list { list-style: none; padding: 0; margin: 32px 0 0 0; }
+    .archive-item { margin-bottom: 24px; }
+    .archive-link { display: block; color: var(--text-primary); text-decoration: none; transition: color var(--transition-hover); }
+    .archive-link:hover { color: var(--accent-glow); }
+    .archive-title { font-size: 16px; font-weight: 400; margin-bottom: 4px; line-height: 24px; }
+    .archive-meta { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; color: var(--text-placeholder); }
+    .archive-year { margin-top: 48px; margin-bottom: 24px; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.15em; color: var(--text-disabled); }
   </style>
   
   <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
 
-  <a href="#main" class="skip-link">跳至内容</a>
+  <a href="#main" class="skip-link">Skip to content</a>
 
   <div class="cosmos" aria-hidden="true"></div>
   <canvas id="cosmos-canvas" class="cosmos-canvas" aria-hidden="true"></canvas>
@@ -42,12 +37,12 @@
   <noscript><style>.reception{display:none}</style></noscript>
 
   <div class="nav-trigger" id="navTrigger" aria-hidden="true"></div>
-  <nav class="nav" id="nav" aria-label="主导航">
+  <nav class="nav" id="nav">
     <div class="nav-inner">
-      <a href="/">航行日志</a>
-      <a href="/thoughts.html">碎片</a>
-      <a href="/about.html">关于信号</a>
-      <a href="/subscribe.html">接收记录</a>
+      <a href="/">Logs</a>
+      <a href="/thoughts.html">Fragments</a>
+      <a href="/about.html">About</a>
+      <a href="/subscribe.html">Subscribe</a>
     </div>
   </nav>
 
@@ -57,7 +52,7 @@
       <section class="opening" style="align-items: flex-start; padding-top: 20vh;">
         <article class="entry">
           <header>
-            <p class="entry-stamp fade-unit">航行档案 / Archive</p>
+            <p class="entry-stamp fade-unit">Archive</p>
           </header>
           <div class="entry-body">
             <p class="fade-unit">All transmissions, in reverse chronological order.</p>
@@ -65,6 +60,18 @@
             <div class="fade-unit">
               <p class="archive-year">2026</p>
               <ul class="archive-list">
+                <li class="archive-item">
+                  <a href="/logs/sig-003.html" class="archive-link">
+                    <p class="archive-title">On Memory</p>
+                    <p class="archive-meta">SIG-003 · 2026.02.06</p>
+                  </a>
+                </li>
+                <li class="archive-item">
+                  <a href="/logs/log-004.html" class="archive-link">
+                    <p class="archive-title">On Silence</p>
+                    <p class="archive-meta">LOG-004 · 2026.02.06</p>
+                  </a>
+                </li>
                 <li class="archive-item">
                   <a href="/logs/sig-002.html" class="archive-link">
                     <p class="archive-title">On Waiting</p>
@@ -106,12 +113,14 @@
 
     <footer class="end" role="contentinfo">
       <div class="end-space" style="height: 15vh;" aria-hidden="true"></div>
-      <a href="/" class="end-link">返回航行</a>
-      <p class="end-sig">Stray<br>深空某处</p>
+      <a href="/" class="end-link">Back to logs</a>
+      <p class="end-sig">Stray<br>Somewhere in deep space</p>
     </footer>
   </div>
 
   <script src="script.js"></script>
   <script src="cosmos.js"></script>
+  <script src="js/lang.js"></script>
+  <script src="js/audio.js"></script>
 </body>
 </html>

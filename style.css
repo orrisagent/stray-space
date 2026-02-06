@@ -404,33 +404,98 @@ a:focus-visible {
   border-radius: var(--radius-xs);
 }
 
+/* ---- Audio toggle ---- */
+
+.audio-toggle {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  width: 36px;
+  height: 36px;
+  background: var(--input-bg);
+  border: 1px solid var(--border-weak);
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 
+    background var(--transition-hover),
+    border-color var(--transition-hover);
+}
+
+.audio-toggle:hover {
+  background: var(--hover-bg);
+  border-color: rgba(255,255,255,0.1);
+}
+
+.audio-toggle:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--focus-glow);
+}
+
+.audio-icon {
+  width: 12px;
+  height: 12px;
+  border: 1.5px solid var(--text-placeholder);
+  border-radius: 50%;
+  position: relative;
+  transition: border-color var(--transition-hover);
+}
+
+.audio-toggle:hover .audio-icon {
+  border-color: var(--text-secondary);
+}
+
+.audio-toggle.playing .audio-icon {
+  border-color: var(--accent-glow);
+  animation: pulse 4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
 /* ---- Language toggle ---- */
 
 .lang-toggle {
   position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  font-family: var(--mono);
-  font-size: 0.5rem;
-  letter-spacing: 0.15em;
-  color: var(--text-ghost);
-  opacity: 0.4;
+  bottom: 24px;
+  right: 24px;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--text-placeholder);
   cursor: pointer;
-  transition: opacity 1.5s ease;
+  transition: color var(--transition-hover);
   z-index: 100;
   background: none;
   border: none;
-  padding: 0.5rem;
+  padding: 8px;
 }
 
 .lang-toggle:hover {
-  opacity: 0.8;
+  color: var(--text-secondary);
 }
 
 @media (max-width: 640px) {
+  .audio-toggle {
+    bottom: 16px;
+    left: 16px;
+    width: 32px;
+    height: 32px;
+  }
+  
+  .audio-icon {
+    width: 10px;
+    height: 10px;
+  }
+  
   .lang-toggle {
-    bottom: 1.5rem;
-    right: 1.5rem;
+    bottom: 16px;
+    right: 16px;
   }
 }
 
