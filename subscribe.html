@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subscribe — Stray</title>
+  <meta name="description" content="Receive signals from deep space.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Space+Grotesk:wght@300&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script>document.documentElement.classList.add('js');</script>
+  <style>
+    .subscribe-form {
+      margin-top: 3rem;
+    }
+    .subscribe-input {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--text-ghost);
+      color: var(--text);
+      font-family: var(--serif);
+      font-size: 1rem;
+      font-weight: 300;
+      padding: 0.8rem 0;
+      width: 100%;
+      max-width: 280px;
+      outline: none;
+      transition: border-color 1.5s ease;
+    }
+    .subscribe-input::placeholder {
+      color: var(--text-ghost);
+    }
+    .subscribe-input:focus {
+      border-color: var(--signal);
+    }
+    .subscribe-button {
+      background: transparent;
+      border: none;
+      color: var(--text-ghost);
+      font-family: var(--mono);
+      font-size: 0.48rem;
+      letter-spacing: 0.25em;
+      margin-top: 2rem;
+      padding: 0;
+      cursor: pointer;
+      transition: color 1.5s ease;
+      display: block;
+    }
+    .subscribe-button:hover {
+      color: var(--signal);
+    }
+    .subscribe-note {
+      margin-top: 3rem;
+      font-family: var(--mono);
+      font-size: 0.45rem;
+      letter-spacing: 0.15em;
+      color: var(--text-ghost);
+      opacity: 0.5;
+      line-height: 2;
+    }
+    .subscribe-success {
+      display: none;
+      color: var(--signal);
+      font-style: italic;
+      margin-top: 2rem;
+    }
+    .subscribe-form.submitted .subscribe-input,
+    .subscribe-form.submitted .subscribe-button {
+      display: none;
+    }
+    .subscribe-form.submitted .subscribe-success {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cosmos"></div>
+  <canvas id="cosmos-canvas" class="cosmos-canvas"></canvas>
+  <div class="reception" id="reception"></div>
+  <noscript><style>.reception{display:none}</style></noscript>
+
+  <div class="nav-trigger" id="navTrigger"></div>
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="/">航行日志</a>
+      <a href="/about.html">关于信号</a>
+      <a href="/subscribe.html">接收记录</a>
+    </div>
+  </nav>
+
+  <div class="content">
+    <main>
+
+      <section class="opening">
+        <article class="entry" id="entry-latest">
+          <p class="entry-stamp fade-unit">接收信号</p>
+          <div class="entry-body">
+            <p class="fade-unit">
+              If you'd like to receive transmissions when new logs are recorded, leave a frequency below.
+            </p>
+            <p class="fade-unit">
+              I won't write often. And when I do, it may take a while to arrive.
+            </p>
+            <p class="fade-unit">
+              Light travels fast, but space is very large.
+            </p>
+            
+            <form class="subscribe-form fade-unit" id="subscribeForm">
+              <input 
+                type="email" 
+                name="email" 
+                class="subscribe-input" 
+                placeholder="your frequency (email)"
+                required
+                autocomplete="email"
+              >
+              <button type="submit" class="subscribe-button">开始接收</button>
+              <p class="subscribe-success">Signal received. I'll find you.</p>
+            </form>
+
+            <p class="subscribe-note fade-unit">
+              No tracking. No algorithms.<br>
+              Just a signal, when there's something to say.
+            </p>
+          </div>
+        </article>
+      </section>
+
+    </main>
+
+    <footer class="end">
+      <div class="end-space" style="height: 20vh;"></div>
+      <a href="/" class="end-link">返回航行</a>
+      <p class="end-sig">T. K. Navarro<br>Deep Space Communications Division</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+  <script src="cosmos.js"></script>
+  <script>
+    // Simple form handler - stores to localStorage for now
+    // Can be replaced with Buttondown, Mailchimp, or Cloudflare Worker
+    document.getElementById('subscribeForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var email = this.querySelector('input[type="email"]').value;
+      
+      // Store locally (replace with actual backend later)
+      var subs = JSON.parse(localStorage.getItem('stray-subscribers') || '[]');
+      if (subs.indexOf(email) === -1) {
+        subs.push(email);
+        localStorage.setItem('stray-subscribers', JSON.stringify(subs));
+      }
+      
+      // Also send to a webhook if configured
+      if (window.STRAY_WEBHOOK) {
+        fetch(window.STRAY_WEBHOOK, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email, source: 'stray.space' })
+        }).catch(function() {});
+      }
+      
+      this.classList.add('submitted');
+    });
+  </script>
+</body>
+</html>
