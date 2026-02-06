@@ -11,7 +11,7 @@
   <meta name="theme-color" content="#080b12">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="/style.css">
   
   <script>document.documentElement.classList.add('js');</script>
 </head>
@@ -24,6 +24,7 @@
   <nav class="nav" id="nav" aria-label="Main navigation">
     <div class="nav-inner">
       <a href="/">航行日志</a>
+      <a href="/thoughts.html">碎片</a>
       <a href="/about.html">关于信号</a>
       <a href="/subscribe.html">接收记录</a>
     </div>
@@ -35,20 +36,23 @@
       <section class="opening">
         <article class="entry">
           <header>
-            <p class="entry-stamp fade-unit">ERROR 404</p>
+            <p class="entry-stamp fade-unit">ERROR 404 — 信号丢失</p>
           </header>
           <div class="entry-body">
             <p class="fade-unit">
               Signal lost.
             </p>
             <p class="fade-unit">
-              This frequency appears to be empty. Perhaps the coordinates were wrong, or the transmission never arrived.
+              I've been to many coordinates in this void. This one appears to be empty — or the transmission was corrupted along the way.
             </p>
             <p class="fade-unit">
-              Space is vast. Things get lost out here.
+              Space is vast. 99.9999...% of it is exactly this: nothing.
             </p>
             <p class="fade-unit">
-              But I'm still broadcasting from the main channel, if you'd like to find me there.
+              But I'm still here. Still transmitting from the main channel. The signal continues elsewhere.
+            </p>
+            <p class="fade-unit" style="margin-top: 2rem;">
+              <a href="/" style="color: var(--signal);">返回航行日志 →</a>
             </p>
           </div>
         </article>
@@ -57,16 +61,12 @@
     </main>
 
     <footer class="end" role="contentinfo">
-      <div class="end-space" style="height: 15vh;" aria-hidden="true"></div>
-      <a href="/" class="end-link">返回航行 / Return to logs</a>
-      <p class="end-sig">
-        Stray<br>
-        深空某处
-      </p>
+      <div class="end-space" style="height: 10vh;" aria-hidden="true"></div>
+      <p class="end-sig">Stray<br>深空某处</p>
     </footer>
   </div>
 
-  <script src="script.js"></script>
-  <script src="cosmos.js"></script>
+  <script src="/script.js"></script>
+  <script src="/cosmos.js"></script>
 </body>
 </html>
