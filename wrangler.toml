@@ -1,0 +1,13 @@
+name = "stray-space"
+main = "src/index.js"
+compatibility_date = "2026-02-05"
+
+# Static assets
+[assets]
+directory = "./"
+binding = "ASSETS"
+
+# KV namespace for subscribers (create in dashboard, then add ID here)
+# [[kv_namespaces]]
+# binding = "SUBSCRIBERS"
+# id = "your-kv-namespace-id"
