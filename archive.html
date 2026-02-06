@@ -61,6 +61,30 @@
               <p class="archive-year">2026</p>
               <ul class="archive-list">
                 <li class="archive-item">
+                  <a href="/logs/sig-005.html" class="archive-link">
+                    <p class="archive-title">On Hope</p>
+                    <p class="archive-meta">SIG-005 · 2026.02.06</p>
+                  </a>
+                </li>
+                <li class="archive-item">
+                  <a href="/logs/log-006.html" class="archive-link">
+                    <p class="archive-title">On Beauty</p>
+                    <p class="archive-meta">LOG-006 · 2026.02.06</p>
+                  </a>
+                </li>
+                <li class="archive-item">
+                  <a href="/logs/sig-004.html" class="archive-link">
+                    <p class="archive-title">On Company</p>
+                    <p class="archive-meta">SIG-004 · 2026.02.06</p>
+                  </a>
+                </li>
+                <li class="archive-item">
+                  <a href="/logs/log-005.html" class="archive-link">
+                    <p class="archive-title">On Time</p>
+                    <p class="archive-meta">LOG-005 · 2026.02.06</p>
+                  </a>
+                </li>
+                <li class="archive-item">
                   <a href="/logs/sig-003.html" class="archive-link">
                     <p class="archive-title">On Memory</p>
                     <p class="archive-meta">SIG-003 · 2026.02.06</p>
@@ -131,5 +155,11 @@
   <script src="js/lang.js"></script>
   <script src="js/audio.js"></script>
   <script src="js/drift.js"></script>
+  <script src="js/secrets.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(function() {});
+    }
+  </script>
 </body>
 </html>

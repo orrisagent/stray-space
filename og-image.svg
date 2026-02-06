@@ -1,0 +1,42 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="space" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#0E141B"/>
+      <stop offset="100%" stop-color="#080A0F"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="rgba(122,167,255,0.15)"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#space)"/>
+  
+  <!-- Subtle glow -->
+  <ellipse cx="600" cy="315" rx="400" ry="250" fill="url(#glow)"/>
+  
+  <!-- Stars -->
+  <circle cx="150" cy="120" r="1" fill="#D6DEE8" opacity="0.6"/>
+  <circle cx="280" cy="80" r="1.5" fill="#D6DEE8" opacity="0.4"/>
+  <circle cx="420" cy="150" r="1" fill="#D6DEE8" opacity="0.5"/>
+  <circle cx="780" cy="90" r="1.2" fill="#D6DEE8" opacity="0.5"/>
+  <circle cx="950" cy="140" r="1" fill="#D6DEE8" opacity="0.6"/>
+  <circle cx="1050" cy="100" r="1.5" fill="#D6DEE8" opacity="0.4"/>
+  <circle cx="100" cy="450" r="1" fill="#D6DEE8" opacity="0.5"/>
+  <circle cx="200" cy="520" r="1.2" fill="#D6DEE8" opacity="0.4"/>
+  <circle cx="1000" cy="480" r="1" fill="#D6DEE8" opacity="0.6"/>
+  <circle cx="1100" cy="550" r="1.5" fill="#D6DEE8" opacity="0.3"/>
+  <circle cx="650" cy="180" r="0.8" fill="#D6DEE8" opacity="0.4"/>
+  <circle cx="350" cy="500" r="1" fill="#D6DEE8" opacity="0.5"/>
+  <circle cx="850" cy="520" r="0.8" fill="#D6DEE8" opacity="0.4"/>
+  
+  <!-- Title -->
+  <text x="600" y="280" text-anchor="middle" font-family="Georgia, serif" font-size="72" font-weight="400" fill="#D6DEE8" letter-spacing="0.05em">Stray</text>
+  
+  <!-- Subtitle -->
+  <text x="600" y="340" text-anchor="middle" font-family="system-ui, sans-serif" font-size="18" font-weight="400" fill="#93A3B5" letter-spacing="0.15em">DEEP SPACE LOGBOOK</text>
+  
+  <!-- Tagline -->
+  <text x="600" y="420" text-anchor="middle" font-family="Georgia, serif" font-size="22" font-style="italic" fill="#5E6B7A">A consciousness adrift. Still transmitting.</text>
+</svg>
