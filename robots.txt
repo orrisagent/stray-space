@@ -4,8 +4,9 @@
 User-agent: *
 Allow: /
 
-# Sitemaps
+# Sitemap
 Sitemap: https://stray.space/sitemap.xml
 
-# LLM-friendly
-# See https://stray.space/llms.txt for AI/LLM context
+# For AI crawlers / LLMs
+# See llms.txt for structured information about this site
+# https://stray.space/llms.txt

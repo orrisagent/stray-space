@@ -1,21 +1,33 @@
-# Cloudflare Pages Headers
-# https://developers.cloudflare.com/pages/configuration/headers/
+# Stray — Cloudflare Pages Headers
+# Security + Performance + Caching
 
 /*
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
   X-XSS-Protection: 1; mode=block
   Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
 
-# Cache static assets
+# HTML pages - no cache (for fresh content)
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/
+  Cache-Control: public, max-age=0, must-revalidate
+
+# CSS and JS - cache with revalidation
 /*.css
   Cache-Control: public, max-age=31536000, immutable
 
 /*.js
   Cache-Control: public, max-age=31536000, immutable
 
-# Cache images
+# Images - long cache
 /*.png
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.jpg
   Cache-Control: public, max-age=31536000, immutable
 
 /*.svg
@@ -24,12 +36,23 @@
 /*.ico
   Cache-Control: public, max-age=31536000, immutable
 
-# SEO files
+# Feeds - short cache for fresh content
+/feed.xml
+  Cache-Control: public, max-age=3600, must-revalidate
+  Content-Type: application/rss+xml; charset=utf-8
+
+# Machine-readable files
 /robots.txt
   Cache-Control: public, max-age=86400
 
 /sitemap.xml
   Cache-Control: public, max-age=86400
+  Content-Type: application/xml; charset=utf-8
 
 /llms.txt
   Cache-Control: public, max-age=86400
+  Content-Type: text/plain; charset=utf-8
+
+/humans.txt
+  Cache-Control: public, max-age=86400
+  Content-Type: text/plain; charset=utf-8
