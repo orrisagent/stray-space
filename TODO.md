@@ -1,126 +1,85 @@
 # Stray — 待办清单
 
-> 上次更新: 2026-02-06 21:30
+> 上次更新: 2026-02-06 21:45
 
 ## 功能层面
 
-- [ ] **配置 KV namespace + 环境变量** (需要 James 手动)
-- [ ] 测试订阅流程
-- [x] 管理工具 — API 已实现 (`/api/subscribers`, `/api/broadcast`)
-- [x] 阅读时间显示 (用"光分钟"单位)
+- [x] 配置 KV namespace + 环境变量
+- [ ] **测试订阅流程** (API 修复中)
+- [x] 管理工具 API
+- [x] 阅读时间显示
+- [x] 语言切换 (自动检测浏览器语言)
 
 ## 用户增长 / 裂变
 
 - [x] 日志底部分享提示语
-- [x] 可引用金句格式 (blockquote.quotable)
-- [ ] 信号接力功能 (转发给朋友) — 待实现
+- [x] 可引用金句格式
+- [ ] 信号接力功能
 
 ## SEO
 
-- [x] 更多内容 — 目前 5 篇日志
-- [ ] 长尾关键词优化 — 持续
-- [x] 内部链接 — thoughts 页面链接到各日志
-- [ ] 偶尔的配图 — 待添加
+- [x] 5 篇日志
+- [ ] 长尾关键词优化
+- [x] 内部链接
+- [ ] 配图
 
 ## GEO
 
-- [x] "Stray 的思考" 页面 — `/thoughts.html`
-- [x] 每篇日志明确 takeaway — quotable 格式
+- [x] thoughts.html 页面
+- [x] quotable 格式
 
 ## 设计
 
-- [ ] 首屏打字机效果 (可选)
-- [ ] 信号强度计数 (匿名阅读数) — 需要 analytics
-- [x] 404 页面增强
+- [x] 订阅表单样式修复
+- [x] 语言切换 (自动检测)
+- [x] UI 元素不再中英文同时显示
+- [x] 404 页面
 
 ## 内容
 
-- [x] LOG-003: On Names
-- [x] SIG-002: On Waiting
+- [x] LOG-003, SIG-002
 - [ ] 继续产出更多日志
-- [ ] "收到信号" 系列 (回应读者)
-- [ ] 音频日志 (TTS)
 
 ## 市场运营
 
-### 冷启动
-- [ ] **创建 Twitter 账号** (需要 James)
-- [ ] Reddit/HN 发布帖子 (需要 James)
-- [ ] Product Hunt 准备
+### 冷启动 (不使用 Twitter)
+- [ ] **Reddit** — r/InternetIsBeautiful, r/minimalism, r/scifi
+- [ ] **Hacker News** — "Show HN: A contemplative AI writing a deep space diary"
+- [ ] **Product Hunt**
+- [ ] **个人社交分享** — 用 James 现有的账号偶尔分享
+- [ ] **Newsletter 平台** — Substack 镜像增加曝光
 
-### 内容节奏
-- 周一: Navigation Log
-- 周四: Signal Log
-
-### 指标
-- 订阅者数量: 0
-- 目标: 100 (本月)
+### 替代 Twitter 的策略
+1. RSS feed 已有,可被各种阅读器收录
+2. 在现有社交账号偶尔分享日志链接
+3. 专注内容质量,靠 SEO 和口碑自然增长
+4. 考虑 Mastodon/Bluesky 等替代平台 (如有兴趣)
 
 ---
 
 ## 进度记录
 
-### 2026-02-06 晚
-- [x] 新增 LOG-003, SIG-002 (共 5 篇日志)
-- [x] 新增 thoughts.html 页面
-- [x] 导航增加"碎片"入口
-- [x] 所有日志添加分享提示
-- [x] 所有日志添加 quotable 金句
-- [x] 更新 archive 页面
-- [x] 更新 RSS feed
-- [x] 更新 sitemap
-- [x] 增强 404 页面
-- [x] 样式支持新组件
+### 2026-02-06 21:45
+- [x] 修复订阅表单样式
+- [x] 实现语言自动检测 (en/zh)
+- [x] 移除 UI 双语显示
+- [x] 更新 Worker 错误处理
+- [x] 更新 wrangler.toml 路由配置
+
+### 2026-02-06 21:30
+- [x] 新增 LOG-003, SIG-002
+- [x] 新增 thoughts.html
+- [x] 更新所有页面导航
 
 ### 2026-02-06 下午
 - [x] 网站基础搭建
-- [x] 订阅系统 API (Workers)
-- [x] 独立日志页面
-- [x] 归档页面
-- [x] RSS feed
-- [x] SEO 基础优化
 - [x] 部署到 Cloudflare Workers
 
 ---
 
-## 需要 James 操作的事项
+## 需要 James 测试
 
-### 1. Cloudflare KV 配置 (必须)
-```
-Workers & Pages → KV → Create namespace
-名称: stray-subscribers
-```
-
-然后绑定到 Worker:
-```
-Worker Settings → Variables → KV Namespace Bindings
-Variable: SUBSCRIBERS
-Namespace: stray-subscribers
-```
-
-### 2. 环境变量 (必须)
-```
-Worker Settings → Variables → Environment Variables
-
-SENDGRID_API_KEY = SG.xxxxxxx (你的 SendGrid API Key)
-ADMIN_KEY = [随机字符串,用于管理接口]
-```
-
-生成 ADMIN_KEY:
-```bash
-openssl rand -hex 32
-```
-
-### 3. 测试订阅
-配置完成后,访问 https://stray.space/subscribe.html 测试
-
-### 4. Twitter 账号 (推荐)
-- 建议用户名: @stray_space 或 @straylogbook
-- 简介: 深空航行日志 / Deep space logbook
-- 链接: https://stray.space
-- 自动同步新日志摘录 (可用 IFTTT 或手动)
-
-### 5. 首次推广 (时机成熟时)
-- Hacker News: "Show HN: A contemplative AI writing a deep space diary"
-- Reddit: r/InternetIsBeautiful, r/minimalism, r/scifi
-- Product Hunt: 准备好 assets 和描述
+1. 访问 https://stray.space/subscribe.html
+2. 输入邮箱,点击 Subscribe
+3. 检查是否收到欢迎邮件
+4. 如果还有错误,查看 Cloudflare Dashboard → Workers → Logs
