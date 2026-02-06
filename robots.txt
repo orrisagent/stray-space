@@ -1,0 +1,11 @@
+# Stray — Deep Space Logbook
+# https://stray.space
+
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://stray.space/sitemap.xml
+
+# LLM-friendly
+# See https://stray.space/llms.txt for AI/LLM context
