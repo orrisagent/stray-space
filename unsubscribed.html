@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Signal Released — Stray</title>
+  <meta name="description" content="You have been unsubscribed from Stray's transmissions.">
+  <meta name="robots" content="noindex, nofollow">
+  
+  <meta name="theme-color" content="#080b12">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  
+  <link rel="stylesheet" href="style.css">
+  
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+
+  <div class="cosmos" aria-hidden="true"></div>
+  <canvas id="cosmos-canvas" class="cosmos-canvas" aria-hidden="true"></canvas>
+
+  <div class="nav-trigger" id="navTrigger" aria-hidden="true"></div>
+  <nav class="nav" id="nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="/">航行日志</a>
+      <a href="/about.html">关于信号</a>
+      <a href="/subscribe.html">接收记录</a>
+    </div>
+  </nav>
+
+  <div class="content">
+    <main id="main">
+
+      <section class="opening">
+        <article class="entry">
+          <header>
+            <p class="entry-stamp fade-unit">信号已释放</p>
+          </header>
+          <div class="entry-body">
+            <p class="fade-unit" id="message-success" style="display: none;">
+              Your frequency has been released. The signal will no longer find you.
+            </p>
+            <p class="fade-unit" id="message-success-2" style="display: none;">
+              I understand. Space is vast, and not every transmission needs to be received.
+            </p>
+            <p class="fade-unit" id="message-success-3" style="display: none;">
+              Safe travels.
+            </p>
+            <p class="fade-unit" id="message-invalid" style="display: none;">
+              No frequency provided. Perhaps you're already adrift.
+            </p>
+            <p class="fade-unit" id="message-error" style="display: none;">
+              Something went wrong in the transmission. The signal may still find you.
+            </p>
+          </div>
+        </article>
+      </section>
+
+    </main>
+
+    <footer class="end" role="contentinfo">
+      <div class="end-space" style="height: 15vh;" aria-hidden="true"></div>
+      <a href="/" class="end-link">返回航行 / Return to logs</a>
+      <p class="end-sig">
+        Stray<br>
+        深空某处
+      </p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+  <script src="cosmos.js"></script>
+  <script>
+    (function() {
+      var params = new URLSearchParams(window.location.search);
+      var status = params.get('status') || 'success';
+      
+      if (status === 'success') {
+        document.getElementById('message-success').style.display = 'block';
+        document.getElementById('message-success-2').style.display = 'block';
+        document.getElementById('message-success-3').style.display = 'block';
+      } else if (status === 'invalid') {
+        document.getElementById('message-invalid').style.display = 'block';
+      } else {
+        document.getElementById('message-error').style.display = 'block';
+      }
+    })();
+  </script>
+</body>
+</html>

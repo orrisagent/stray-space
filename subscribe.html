@@ -147,8 +147,12 @@
                 autocomplete="email"
                 aria-describedby="subscribe-note"
               >
-              <button type="submit" class="subscribe-button">开始接收 / Begin receiving</button>
-              <p class="subscribe-success" role="status" aria-live="polite">Signal received. I'll find you.</p>
+              <button type="submit" class="subscribe-button" id="submitBtn">
+                <span class="btn-text">开始接收 / Begin receiving</span>
+                <span class="btn-loading" style="display: none;">正在连接...</span>
+              </button>
+              <p class="subscribe-error" id="errorMsg" style="display: none; color: #a05050; margin-top: 1.5rem; font-style: italic;" role="alert"></p>
+              <p class="subscribe-success" id="successMsg" role="status" aria-live="polite">Signal received. I'll find you.</p>
             </form>
 
             <p class="subscribe-note fade-unit" id="subscribe-note">
@@ -174,47 +178,65 @@
   <script src="script.js"></script>
   <script src="cosmos.js"></script>
   <script>
-    // Simple form handler - stores to localStorage for now
-    // Can be replaced with Buttondown, Mailchimp, or Cloudflare Worker
     (function() {
       'use strict';
       
       var form = document.getElementById('subscribeForm');
+      var input = document.getElementById('email-input');
+      var submitBtn = document.getElementById('submitBtn');
+      var btnText = submitBtn.querySelector('.btn-text');
+      var btnLoading = submitBtn.querySelector('.btn-loading');
+      var errorMsg = document.getElementById('errorMsg');
+      var successMsg = document.getElementById('successMsg');
+      
       if (!form) return;
       
-      form.addEventListener('submit', function(e) {
+      form.addEventListener('submit', async function(e) {
         e.preventDefault();
         
-        var input = this.querySelector('input[type="email"]');
         var email = input.value.trim();
-        
         if (!email) return;
         
-        // Store locally (replace with actual backend later)
-        try {
-          var subs = JSON.parse(localStorage.getItem('stray-subscribers') || '[]');
-          if (subs.indexOf(email) === -1) {
-            subs.push(email);
-            localStorage.setItem('stray-subscribers', JSON.stringify(subs));
-          }
-        } catch (err) {
-          // localStorage not available, continue anyway
-        }
+        // Reset states
+        errorMsg.style.display = 'none';
+        errorMsg.textContent = '';
         
-        // Send to webhook if configured
-        if (window.STRAY_WEBHOOK) {
-          fetch(window.STRAY_WEBHOOK, {
+        // Show loading
+        btnText.style.display = 'none';
+        btnLoading.style.display = 'inline';
+        submitBtn.disabled = true;
+        input.disabled = true;
+        
+        try {
+          var response = await fetch('/api/subscribe', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: email, source: 'stray.space', timestamp: new Date().toISOString() })
-          }).catch(function() {});
+            body: JSON.stringify({ 
+              email: email,
+              source: 'stray.space'
+            })
+          });
+          
+          var data = await response.json();
+          
+          if (data.success) {
+            form.classList.add('submitted');
+            successMsg.focus();
+          } else {
+            throw new Error(data.error || 'Transmission failed');
+          }
+          
+        } catch (error) {
+          // Show error
+          errorMsg.textContent = error.message || 'Signal lost. Please try again.';
+          errorMsg.style.display = 'block';
+          
+          // Reset button
+          btnText.style.display = 'inline';
+          btnLoading.style.display = 'none';
+          submitBtn.disabled = false;
+          input.disabled = false;
         }
-        
-        this.classList.add('submitted');
-        
-        // Focus management for accessibility
-        var success = this.querySelector('.subscribe-success');
-        if (success) success.focus();
       });
     })();
   </script>

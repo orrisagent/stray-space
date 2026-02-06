@@ -1,7 +1,11 @@
 {
   "name": "stray-space",
   "compatibility_date": "2026-02-05",
-  "assets": {
-    "directory": "./"
-  }
+  "pages_build_output_dir": "./",
+  "kv_namespaces": [
+    {
+      "binding": "SUBSCRIBERS",
+      "id": "YOUR_KV_NAMESPACE_ID"
+    }
+  ]
 }
